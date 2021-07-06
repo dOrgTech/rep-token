@@ -9,11 +9,6 @@ contract Reputation is ERC20Burnable, Ownable {
     constructor(address[] memory tokenHolders, uint256[] memory amounts)
         ERC20("dOrg", "dOrg")
     {
-        require(
-            tokenHolders.length == amounts.length,
-            "Token holders and amounts lengths must match"
-        );
-
         mintMultiple(tokenHolders, amounts);
     }
 
@@ -25,25 +20,14 @@ contract Reputation is ERC20Burnable, Ownable {
         address[] memory tokenHolders,
         uint256[] memory amounts
     ) public onlyOwner {
+        require(
+            tokenHolders.length == amounts.length,
+            "Token holders and amounts lengths must match"
+        );
+
         for (uint256 i = 0; i < tokenHolders.length; i++) {
             mint(tokenHolders[i], amounts[i]);
         }
-    }
-
-    function transfer(address recipient, uint256 amount)
-        public
-        override
-        returns (bool)
-    {
-        return super.transfer(recipient, amount);
-    }
-
-    function transferFrom(
-        address sender,
-        address recipient,
-        uint256 amount
-    ) public override returns (bool) {
-        return super.transferFrom(sender, recipient, amount);
     }
 
     function burnFrom(address account, uint256 amount)
