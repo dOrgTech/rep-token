@@ -1,0 +1,6 @@
+{
+  "name": "dOrg",
+  "symbol": "dOrg",
+  "decimals": 18,
+  "holders": [{ "address": "0x5A97D68e8c517CA261D8a666CCb387bd75FBeefb", "amount": "10000000000" }]
+}
