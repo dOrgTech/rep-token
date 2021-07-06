@@ -21,4 +21,4 @@ jobs:
       - name: Run linter
         run: yarn run lint
       - name: Run tests
-        run: yarn run test:ci
+        run: yarn run test
