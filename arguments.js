@@ -6,7 +6,7 @@ const amounts = [];
 
 for (const holder of migration.holders) {
   tokenHolders.push(holder.address);
-  amounts.push(ethers.BigNumber.from(holder.amount))
+  amounts.push(ethers.BigNumber.from(holder.balance))
 }
 
 module.exports = [

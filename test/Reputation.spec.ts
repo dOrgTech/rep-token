@@ -45,7 +45,7 @@ describe("dOrg Reputation Token", () => {
 
       for (const tokenHolder of tokenHolders.holders) {
         const balance = await RepToken.balanceOf(tokenHolder.address);
-        expect(balance.toString()).to.be.deep.equal(tokenHolder.amount);
+        expect(balance.toString()).to.be.deep.equal(tokenHolder.balance);
       }
     });
   });
