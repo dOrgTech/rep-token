@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/types";
 import dotenv from "dotenv";
 
+import "@openzeppelin/hardhat-upgrades";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
 
@@ -16,7 +17,7 @@ const config: HardhatUserConfig = {
   solidity: "0.8.0",
   paths: {
     sources: "./contracts",
-    artifacts: "./artifacts",
+    artifacts: "./artifacts"
   },
   networks: {
     goerli: {
@@ -26,18 +27,18 @@ const config: HardhatUserConfig = {
     mainnet: {
       url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
       accounts: [`0x${process.env.MAINNET_PRIVATE_KEY}`]
-    },
+    }
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: process.env.ETHERSCAN_API_KEY
   },
   typechain: {
     outDir: "typechain",
-    target: "ethers-v5",
+    target: "ethers-v5"
   },
   namedAccounts: {
-    deployer: 0,
-  },
+    deployer: 0
+  }
 };
 
 export default config;

@@ -1,14 +1,32 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract Reputation is ERC20Burnable, Ownable {
-    constructor(address[] memory tokenHolders, uint256[] memory amounts)
-        ERC20("dOrg", "dOrg")
+contract Reputation is Initializable, ERC20BurnableUpgradeable, OwnableUpgradeable {
+
+  mapping(address => bool) public whitelist;
+
+  modifier onlyWhitelisted() {
+      require(
+          whitelist[_msgSender()] == true,
+          "Reputation: caller is not a whitelisted address"
+      );
+      _;
+  }
+
+    function initialize(
+      address[] memory tokenHolders,
+      uint256[] memory amounts
+    )
+    public
+    initializer
     {
+      ERC20BurnableUpgradeable.__ERC20Burnable_init();
+      ERC20Upgradeable.__ERC20_init("dOrg", "dOrg");
         mintMultiple(tokenHolders, amounts);
     }
 
@@ -36,5 +54,23 @@ contract Reputation is ERC20Burnable, Ownable {
         onlyOwner
     {
         super._burn(account, amount);
+    }
+
+    function transfer(
+      address recipient,
+      uint256 amount
+    )
+    public
+    onlyWhitelisted
+    virtual
+    override
+    returns (bool)
+    {
+        _transfer(_msgSender(), recipient, amount);
+        return true;
+    }
+
+    function whitelistAdd(address _add) external onlyOwner {
+      whitelist[_add] = true;
     }
 }
