@@ -193,6 +193,8 @@ describe("dOrg Reputation Token", () => {
       const transfere = accountsAddresses[4];
       await RepToken.mint(transferer, balance);
       await ReputationToken1.whitelistAdd(transferer);
+
+      await ReputationToken2.transfer(transfere, 1);
     });
   });
 });
