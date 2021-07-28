@@ -10,8 +10,13 @@ const deployFunc: DeployFunction = async function({
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const res = await upgrades.deployProxy("Reputation", {
+  const res = await deploy("Reputation", {
     from: deployer,
+    proxy: {
+      owner: deployer,
+      methodName: "initialize",
+      proxyContract: "OpenZeppelinTransparentProxy"
+    },
     args
   });
   console.log(res.address);

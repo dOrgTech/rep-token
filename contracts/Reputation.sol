@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
@@ -25,6 +25,7 @@ contract Reputation is Initializable, ERC20BurnableUpgradeable, OwnableUpgradeab
     public
     initializer
     {
+      OwnableUpgradeable.__Ownable_init();
       ERC20BurnableUpgradeable.__ERC20Burnable_init();
       ERC20Upgradeable.__ERC20_init("dOrg", "dOrg");
         mintMultiple(tokenHolders, amounts);
