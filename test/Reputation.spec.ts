@@ -36,7 +36,6 @@ describe("dOrg Reputation Token", () => {
       RepTokenDeployment.address,
       signers[0]
     )) as Reputation;
-    console.log(RepTokenDeployment.address);
   });
 
   describe("initialize()", async () => {

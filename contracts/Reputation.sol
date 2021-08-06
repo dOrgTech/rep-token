@@ -6,28 +6,28 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract Reputation is Initializable, ERC20BurnableUpgradeable, OwnableUpgradeable {
+contract Reputation is
+    Initializable,
+    ERC20BurnableUpgradeable,
+    OwnableUpgradeable
+{
+    mapping(address => bool) public whitelist;
 
-  mapping(address => bool) public whitelist;
+    modifier onlyWhitelisted() {
+        require(
+            whitelist[_msgSender()] == true,
+            "Reputation: caller is not a whitelisted address"
+        );
+        _;
+    }
 
-  modifier onlyWhitelisted() {
-      require(
-          whitelist[_msgSender()] == true,
-          "Reputation: caller is not a whitelisted address"
-      );
-      _;
-  }
-
-    function initialize(
-      address[] memory tokenHolders,
-      uint256[] memory amounts
-    )
-    public
-    initializer
+    function initialize(address[] memory tokenHolders, uint256[] memory amounts)
+        public
+        initializer
     {
-      OwnableUpgradeable.__Ownable_init();
-      ERC20BurnableUpgradeable.__ERC20Burnable_init();
-      ERC20Upgradeable.__ERC20_init("dOrg", "dOrg");
+        OwnableUpgradeable.__Ownable_init();
+        ERC20BurnableUpgradeable.__ERC20Burnable_init();
+        ERC20Upgradeable.__ERC20_init("dOrg", "dOrg");
         mintMultiple(tokenHolders, amounts);
     }
 
@@ -57,21 +57,18 @@ contract Reputation is Initializable, ERC20BurnableUpgradeable, OwnableUpgradeab
         super._burn(account, amount);
     }
 
-    function transfer(
-      address recipient,
-      uint256 amount
-    )
-    public
-    onlyWhitelisted
-    virtual
-    override
-    returns (bool)
+    function transfer(address recipient, uint256 amount)
+        public
+        virtual
+        override
+        onlyWhitelisted
+        returns (bool)
     {
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
 
     function whitelistAdd(address _add) external onlyOwner {
-      whitelist[_add] = true;
+        whitelist[_add] = true;
     }
 }

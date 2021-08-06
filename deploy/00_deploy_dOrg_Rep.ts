@@ -1,5 +1,4 @@
 import { DeployFunction } from "hardhat-deploy/types";
-const { ethers, upgrades } = require("hardhat");
 
 const args = require("../arguments");
 
