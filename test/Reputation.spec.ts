@@ -38,7 +38,7 @@ describe("dOrg Reputation Token", () => {
     )) as Reputation;
   });
 
-  describe("constructor()", async () => {
+  describe("initialize()", async () => {
     it("should successfully deploy contract and mint to token holders ", async () => {
       expect(RepToken.address).to.not.be.null;
       expect(tokenHolders.holders.length).to.be.greaterThan(0);
@@ -155,6 +155,45 @@ describe("dOrg Reputation Token", () => {
       ).to.be.rejectedWith(
         "VM Exception while processing transaction: revert Ownable: caller is not the owner"
       );
+    });
+  });
+
+  describe("transfer()", async () => {
+    it("should fail to transfer the token for a non whitelisted address", async () => {
+      const ReputationToken = await ethers.getContractAt(
+        RepTokenDeployment.abi,
+        RepTokenDeployment.address,
+        signers[5]
+      );
+      const newHolder = accountsAddresses[3];
+      const balance = 100000000;
+      await expect(
+        ReputationToken.transfer(newHolder, balance)
+      ).to.be.rejectedWith(
+        "VM Exception while processing transaction: revert Reputation: caller is not a whitelisted address"
+      );
+    });
+
+    it("should allow whitelisted addresses to transfer the token ", async () => {
+      const ReputationToken1 = await ethers.getContractAt(
+        RepTokenDeployment.abi,
+        RepTokenDeployment.address,
+        signers[0]
+      );
+
+      const ReputationToken2 = await ethers.getContractAt(
+        RepTokenDeployment.abi,
+        RepTokenDeployment.address,
+        signers[2]
+      );
+      const balance = 100000000;
+
+      const transferer = accountsAddresses[2];
+      const transfere = accountsAddresses[4];
+      await RepToken.mint(transferer, balance);
+      await ReputationToken1.whitelistAdd(transferer);
+
+      await ReputationToken2.transfer(transfere, 1);
     });
   });
 });
